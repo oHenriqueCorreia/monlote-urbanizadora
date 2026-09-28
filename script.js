@@ -83,18 +83,27 @@ document.addEventListener('visibilitychange', function () {
 });
 startStoryTimer();
 
-const expertiseButtons = Array.from(document.querySelectorAll('[data-expertise]'));
-const expertiseDetails = Array.from(document.querySelectorAll('[data-expertise-detail]'));
+const expertiseStages = [
+  { image: 'assets/portofino-terraplenagem.webp', alt: 'Terraplenagem registrada na obra do Portofino', description: 'O primeiro movimento prepara a área e estabelece a base para todas as frentes seguintes.' },
+  { image: 'assets/portofino-drenagem.webp', alt: 'Tubulação de drenagem instalada no Portofino', description: 'Água, esgoto e drenagem entram no planejamento das redes que estruturam o empreendimento.' },
+  { image: 'assets/portofino-pavimentacao.webp', alt: 'Equipe executando a pavimentação no Portofino', description: 'As vias começam a conectar as diferentes áreas e a definir a circulação do lugar.' },
+  { image: 'assets/portofino-urbanismo.webp', alt: 'Via pavimentada e paisagismo no Portofino', description: 'Espaços externos, vias e paisagem se integram na leitura final do empreendimento.' }
+];
+const expertiseButtons = Array.from(document.querySelectorAll('[data-expertise-stage]'));
+const expertiseImage = document.querySelector('[data-expertise-image]');
+const expertiseCounter = document.querySelector('[data-expertise-counter]');
+const expertiseDescription = document.querySelector('[data-expertise-description]');
 expertiseButtons.forEach(function (button, index) {
   button.addEventListener('click', function () {
-    expertiseButtons.forEach(function (item, i) {
-      item.classList.toggle('is-active', i === index);
-      item.setAttribute('aria-expanded', String(i === index));
+    const stage = expertiseStages[index];
+    expertiseButtons.forEach(function (item, itemIndex) {
+      item.classList.toggle('is-active', itemIndex === index);
+      item.setAttribute('aria-pressed', String(itemIndex === index));
     });
-    expertiseDetails.forEach(function (detail, i) {
-      detail.hidden = i !== index;
-      detail.classList.toggle('is-active', i === index);
-    });
+    expertiseImage.src = stage.image;
+    expertiseImage.alt = stage.alt;
+    expertiseCounter.textContent = String(index + 1).padStart(2, '0') + ' / 04';
+    expertiseDescription.textContent = stage.description;
   });
 });
 
