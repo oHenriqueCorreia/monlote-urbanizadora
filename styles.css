@@ -432,3 +432,6 @@ h2 strong{font-weight:750}
   .work-flow-grid{grid-template-columns:minmax(0,1fr)}
   .work-flow-side,.work-flow-sequence{min-width:0}
 }
+
+/* Enquadramento da foto vertical da rede de drenagem nos cards horizontais. */
+.project-stage-grid a:nth-child(2) img,.stage-card:nth-child(2) .stage-card-image img,.gallery-item[data-caption="Rede de drenagem"] img{object-position:center 68%}
