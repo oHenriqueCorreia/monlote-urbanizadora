@@ -1,0 +1,15 @@
+﻿PACOTE DO SITE MONLOTE PARA HOSTGATOR
+
+Arquivo para envio: monlote-hostgator.zip
+
+Como publicar no domínio principal:
+1. Entre no cPanel > Gerenciador de Arquivos > public_html.
+2. Se já houver uma página padrão ou outro site nessa pasta, faça backup antes de substituir os arquivos.
+3. Envie monlote-hostgator.zip para public_html e use a opção Extrair com destino public_html.
+4. Confira que index.html, styles.css, os demais .html e a pasta assets aparecem diretamente dentro de public_html (sem uma pasta monlote-hostgator entre eles).
+5. Abra o domínio e confira Início, A Monlote, Nossa atuação, Projetos, Portofino e Contato, incluindo o vídeo.
+6. Após confirmar o funcionamento, o ZIP enviado pode ser removido do servidor para poupar espaço.
+
+Para domínio adicional ou subdomínio, use a pasta raiz indicada para esse domínio no cPanel em vez de public_html.
+O pacote contém apenas arquivos públicos do site. Não inclui .git, .vercel ou documentação interna.
+Os links de contato por e-mail continuam abrindo o aplicativo de e-mail do visitante, como no site atual.

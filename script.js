@@ -141,3 +141,56 @@ if (heroVideo && heroVideoToggle) {
   heroVideo.addEventListener('pause', setVideoState);
   setVideoState();
 }
+
+
+const fieldVideo = document.querySelector('#field-feature-video');
+const fieldToggle = document.querySelector('#field-feature-toggle');
+const fieldStages = Array.from(document.querySelectorAll('[data-field-stage]'));
+const fieldStageImage = document.querySelector('#field-stage-image');
+const fieldStageCount = document.querySelector('#field-stage-count');
+const fieldKicker = document.querySelector('#field-feature-kicker');
+const fieldTitle = document.querySelector('#field-feature-title');
+const fieldDescription = document.querySelector('#field-feature-description');
+if (fieldVideo && fieldStages.length) {
+  let fieldIndex = 0;
+  function setFieldStage(index, seekVideo) {
+    fieldIndex = (index + fieldStages.length) % fieldStages.length;
+    const item = fieldStages[fieldIndex];
+    fieldStages.forEach(function (stage, i) {
+      stage.classList.toggle('is-active', i === fieldIndex);
+      stage.setAttribute('aria-selected', String(i === fieldIndex));
+    });
+    fieldStageImage.src = item.dataset.stageImage;
+    fieldStageImage.alt = item.dataset.stageAlt;
+    fieldStageCount.textContent = String(fieldIndex + 1).padStart(2, '0') + ' / ' + String(fieldStages.length).padStart(2, '0');
+    fieldKicker.textContent = item.dataset.stageKicker;
+    fieldTitle.textContent = item.dataset.stageTitle;
+    fieldDescription.textContent = item.dataset.stageDescription;
+    if (seekVideo && Number.isFinite(fieldVideo.duration) && fieldVideo.duration > 0) {
+      fieldVideo.currentTime = (fieldVideo.duration / fieldStages.length) * fieldIndex;
+    }
+  }
+  function syncFieldStage() {
+    if (!Number.isFinite(fieldVideo.duration) || fieldVideo.duration <= 0) return;
+    const nextIndex = Math.min(fieldStages.length - 1, Math.floor((fieldVideo.currentTime / fieldVideo.duration) * fieldStages.length));
+    if (nextIndex !== fieldIndex) setFieldStage(nextIndex, false);
+  }
+  fieldStages.forEach(function (stage, index) {
+    stage.addEventListener('click', function () { setFieldStage(index, true); });
+  });
+  fieldVideo.addEventListener('loadedmetadata', function () { setFieldStage(0, false); });
+  fieldVideo.addEventListener('timeupdate', syncFieldStage);
+  fieldVideo.addEventListener('ended', function () { setFieldStage(0, false); });
+  if (fieldToggle) fieldToggle.addEventListener('click', function () {
+    if (fieldVideo.paused) {
+      fieldVideo.play().catch(function () {});
+      fieldToggle.textContent = 'Ⅱ';
+      fieldToggle.setAttribute('aria-label', 'Pausar vídeo');
+    } else {
+      fieldVideo.pause();
+      fieldToggle.textContent = '▶';
+      fieldToggle.setAttribute('aria-label', 'Reproduzir vídeo');
+    }
+  });
+  setFieldStage(0, false);
+}
