@@ -1,31 +1,60 @@
-const menuButton = document.querySelector('.menu-toggle');
-const mobileNav = document.querySelector('.mobile-nav');
+const WHATSAPP_PRIMARY = '5548998183814';
+const WHATSAPP_DEFAULT_MESSAGE = 'Olá! Conheci a Monlote pelo site e gostaria de conversar sobre um projeto de urbanização ou infraestrutura.';
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
-function setMenu(open) {
-  menuButton.setAttribute('aria-expanded', String(open));
-  menuButton.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
-  mobileNav.classList.toggle('open', open);
-  document.body.classList.toggle('menu-open', open);
+function whatsappUrl(phone, message) {
+  return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }
 
-menuButton.addEventListener('click', function () {
-  setMenu(menuButton.getAttribute('aria-expanded') !== 'true');
+document.querySelectorAll('[data-whatsapp]').forEach(function (link) {
+  const phone = link.dataset.whatsappPhone || WHATSAPP_PRIMARY;
+  const message = link.dataset.whatsappMessage || WHATSAPP_DEFAULT_MESSAGE;
+  link.href = whatsappUrl(phone, message);
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
 });
-mobileNav.querySelectorAll('a').forEach(function (link) {
-  link.addEventListener('click', function () { setMenu(false); });
-});
-document.addEventListener('keydown', function (event) {
-  if (event.key === 'Escape') setMenu(false);
-});
-window.addEventListener('resize', function () {
-  if (window.innerWidth > 900) setMenu(false);
-});
-window.addEventListener('pageshow', function () { setMenu(false); });
+
+if (!document.querySelector('.whatsapp-float')) {
+  const whatsappFloat = document.createElement('a');
+  whatsappFloat.className = 'whatsapp-float';
+  whatsappFloat.href = whatsappUrl(WHATSAPP_PRIMARY, WHATSAPP_DEFAULT_MESSAGE);
+  whatsappFloat.target = '_blank';
+  whatsappFloat.rel = 'noopener noreferrer';
+  whatsappFloat.setAttribute('aria-label', 'Conversar com a Monlote pelo WhatsApp');
+  whatsappFloat.innerHTML = '<span class="whatsapp-float-label">Fale no WhatsApp</span><span class="whatsapp-float-mark" aria-hidden="true">✆</span>';
+  document.body.appendChild(whatsappFloat);
+}
+
+const menuButton = document.querySelector('.menu-toggle');
+const mobileNav = document.querySelector('.mobile-nav');
+
+if (menuButton && mobileNav) {
+  function setMenu(open) {
+    menuButton.setAttribute('aria-expanded', String(open));
+    menuButton.setAttribute('aria-label', open ? 'Fechar menu' : 'Abrir menu');
+    mobileNav.classList.toggle('open', open);
+    document.body.classList.toggle('menu-open', open);
+  }
+
+  menuButton.addEventListener('click', function () {
+    setMenu(menuButton.getAttribute('aria-expanded') !== 'true');
+  });
+  mobileNav.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () { setMenu(false); });
+  });
+  document.addEventListener('keydown', function (event) {
+    if (event.key === 'Escape') setMenu(false);
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 900) setMenu(false);
+  });
+  window.addEventListener('pageshow', function () { setMenu(false); });
+}
 
 const heroWord = document.querySelector('[data-hero-word]');
 const heroWords = ['transforma.', 'conecta.', 'valoriza.'];
 let heroWordIndex = 0;
+
 if (heroWord && !reducedMotion.matches) {
   window.setInterval(function () {
     heroWord.classList.add('is-changing');
@@ -43,6 +72,7 @@ function setupSlider(slideSelector, dotSelector) {
   let current = 0;
 
   function show(index) {
+    if (!slides.length) return;
     current = (index + slides.length) % slides.length;
     slides.forEach(function (slide, i) {
       slide.hidden = i !== current;
@@ -68,9 +98,7 @@ if (storySection) {
   let storyTimer;
 
   function startStoryTimer() {
-    if (!reducedMotion.matches && !storyTimer) {
-      storyTimer = window.setInterval(storySlider.next, 7000);
-    }
+    if (!reducedMotion.matches && !storyTimer) storyTimer = window.setInterval(storySlider.next, 7000);
   }
 
   function stopStoryTimer() {
@@ -105,4 +133,5 @@ if (reducedMotion.matches || !('IntersectionObserver' in window)) {
   reveals.forEach(function (element) { revealObserver.observe(element); });
 }
 
-document.getElementById('year').textContent = new Date().getFullYear();
+const year = document.getElementById('year');
+if (year) year.textContent = new Date().getFullYear();
