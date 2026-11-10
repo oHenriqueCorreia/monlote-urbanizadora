@@ -2,3 +2,7 @@
 .DS_Store
 Thumbs.db
 *.log
+tmp-*/
+assets/source-*
+assets/actuation-video-poster.jpg
+assets/actuation-video-sample.jpg

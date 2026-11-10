@@ -2,6 +2,13 @@ const WHATSAPP_PRIMARY = '5548998183814';
 const WHATSAPP_DEFAULT_MESSAGE = 'Olá! Conheci a Monlote pelo site e gostaria de conversar sobre um projeto de urbanização ou infraestrutura.';
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
+const heroVideo = document.querySelector('[data-hero-video]');
+if (heroVideo && !reducedMotion.matches) {
+  heroVideo.play().catch(function () {
+    // O pôster permanece visível caso o navegador bloqueie a reprodução automática.
+  });
+}
+
 function whatsappUrl(phone, message) {
   return `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
 }

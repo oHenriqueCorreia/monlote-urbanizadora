@@ -2,3 +2,7 @@
 docs/
 README.md
 entrega-hostgator/
+tmp-*/
+assets/source-*
+assets/actuation-video-poster.jpg
+assets/actuation-video-sample.jpg
